@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     make \
     golang
 
-RUN git clone https://github.com/rjocoleman/get_iplayer_rss.git
+RUN git clone https://github.com/hepto/get_iplayer_rss.git
 
 WORKDIR get_iplayer_rss
 
@@ -20,7 +20,10 @@ RUN apt-get update && \
 
 RUN add-apt-repository ppa:jon-hedgerows/get-iplayer && \
     apt-get update && \
-    apt-get install -y get-iplayer 
+    apt-get install -y \
+    get-iplayer \
+    rsync \
+    openssh-client
 
 RUN mkdir -p /data/output /data/config
 

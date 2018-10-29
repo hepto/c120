@@ -1,18 +1,10 @@
-#!/bin/bash 
+#!/bin/bash
 
-# We are running get_iplayer in Docker which sends a SIGTERM when a container is stopped.
-# Unforutnatley, the pvr_lock is not removed on a SIGTERM so fails to start up again.
-# This is then fatal on a reboot as the scheduler will not start again.
-# Fix is to catch the SIGTERM and convert it into a SIGINT which will remove the lock.
+while true
+do 
+    /usr/bin/get_iplayer --profile-dir /data/config --output /data/output --pvr
+    /usr/bin/get_iplayer_rss gen -d /data/config -o /data/output -u $BASE_URL
+    rsync -avzh /data/output/ $RSYNC_USER@$RSYNC_HOST:$RSYNC_FOLDER
+    sleep 14400
+done
 
-_term() { 
-  echo "Caught SIGTERM signal!" 
-  kill -2 "$child" 2>/dev/null
-}
-
-trap _term SIGTERM
-
-/usr/bin/get_iplayer --profile-dir /data/config --output /data/output --pvrscheduler 3600 &
-
-child=$! 
-wait "$child"
