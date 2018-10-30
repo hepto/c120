@@ -59,6 +59,8 @@ And it will be added to the list.  Next time `c120` runs it will then download a
 
 All the audio and RSS files will then be synced to your host of choice - and there'll be one RSS feed per program.
 
+NOTE - the script relies on using public key authentication to the remote rsync path to avoid having passwords in any of the config, or being prompted, so the local .ssh directory of the host is mapped into the Docker image so it has access to the keys.
+
 Configuring hosting and all that is an excercise for the reader, but an easy way is to enable directory listing on the web server so you can then copy the paths to the RSS feeds and add them to your reader. Oh and think about using basic auth and letsencrypt while you're there ...
 
 Note, it's perfectly reasonbable to mount the output location as the webroot in another Docker image and serve from it directly.  I do this and use the rsync simply as a backup!
