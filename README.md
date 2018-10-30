@@ -4,11 +4,14 @@ c120 is a system to grab BBC Radio programs and publish to RSS for subscription 
 
 ## what?
 
-c120 has two main components - a long running script (`c120`) that periodically downloads subscribed shows from the BBC, creates an RSS feed for them and then syncs them to a static webhost so that the feed can be added to a podcast app, and a wrapper to the popular `get_iplayer` script to search and schedule recordings to inside `c120`.
+c120 has two main components:
+
+* a long running script (`c120`) that periodically downloads subscribed shows from the BBC, creates an RSS feed for them and then syncs them to a static webhost so that the feed can be added to a podcast app
+* a wrapper to the popular `get_iplayer` script to search and schedule recordings inside `c120`.
 
 It all lives witin a Docker container so you don't have to worry about dependencies or configuration - just run and go!
 
-Basically you start the Docker image, then use a wrapper script for the well-known `get_iplayer` to schedule "recordings" inside the image.  Every 4 hours the script inside the image will check for new episodes of the shows you've scheduled, download and tag them, create an RSS feed and then rsync them to another location, typically for hosting.
+Basically you start the Docker image and use the wrapper script to schedule a "recordings".  Every 4 hours `c120` will check for new episodes, download and tag them, create an RSS feed and then rsync them to another location, typically for hosting.
 
 ## how?
 
