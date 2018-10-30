@@ -16,35 +16,40 @@ First you need to build the docker image, so ...
 
 //TODO publish image to Docker
 
-```git clone https://github.com/hepto/c120
+```
+git clone https://github.com/hepto/c120
 cd c120
 docker build -t c120 .
 ```
 
 Then, edit the `start_c120.sh` script with your personal details - it's simply a wrapper to `docker run`, but there are some variables in there you need to customise to yourself.  Once thats all sorted:
 
-```./start_c120.sh
+```
+./start_c120.sh
 ```
 
 Now you should have running containeer called `c120`.
 
 Next is to schedule some recordings.  The `get_iplayer.sh` script simply wraps the standard `get_iplayer` script, but sets the right download locations inside the image.  So check the docs for `get-iplayer` to see what you can do in full, but typically you're gonna do:
 
-```./get_iplayer.sh --type="radio" "search_term"
+```
+./get_iplayer.sh --type="radio" "search_term"
 ```
 
 This will search the available programs, and give you an ID.
 
 Then to get a single program, one time:
 
-```./get_iplayer.sh --get ID
+```
+./get_iplayer.sh --get ID
 ```
 
 This will get that episode and put it in tje right location so that next time `c120` runs it will create an RSS feed for it.
 
 BUT, you are more likely to want to schedule a series!  `get_iplayer` is clever enough to work out a series from a single episode, so simply call:
 
-```./get_iplayer.sh --pvr-series ID
+```
+./get_iplayer.sh --pvr-series ID
 ```
 
 And it will be added to the list.  Next time `c120` runs it will then download all episdoe for that program, and create the RSS feed.
