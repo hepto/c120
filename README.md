@@ -55,12 +55,12 @@ Configuring hosting and all that is an excercise for the reader, but an easy way
 
 Note, it's perfectly reasonbable to mount the output location as the webroot in another Docker image and serve from it directly.  I do this and use the rsync simply as a backup!
 
-# why?
+## why?
 
 In a nutshell, I kept forgetting to listen to shows before they dissapeared!  So I wanted a way to be notified/reminded that a show was available, and I coudln't find a way for the BBC to do that themselves.
 
 Also, while the BBC does a great job of publishing content through its iPlayer app and various podcasts, unfortuantely live shows aren't generally available outside of the BBC app, and you can only listen again up to 30 days later.
 
-# why c120?
+## why c120?
 
 It's a thowback to the days of cassettes where c120 was a type of cassette, 120 mins in length.  This just happens to be the same length as the BBC Essential Mixes, so I had plenty of these when I was young to record the shows!  This app is just the modern equivalent ...
