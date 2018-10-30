@@ -14,13 +14,13 @@ Basically you start the Docker image, then use a wrapper script for the well-kno
 
 First you need to build the docker image, so ...
 
-//TODO publish image to Docker
-
 ```
 git clone https://github.com/hepto/c120
 cd c120
 docker build -t c120 .
 ```
+
+//TODO publish image to Docker
 
 Then, edit the `start_c120.sh` script with your personal details - it's simply a wrapper to `docker run`, but there are some variables in there you need to customise to yourself.  Once thats all sorted:
 
