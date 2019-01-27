@@ -25,7 +25,7 @@ RUN add-apt-repository ppa:jon-hedgerows/get-iplayer && \
     rsync \
     openssh-client
 
-RUN mkdir -p /data/output /data/config
+RUN mkdir -p /c120/downloads /c120/config
 
 COPY --from=builder /root/get_iplayer_rss/get_iplayer_rss /usr/bin/
 COPY c120.sh /usr/bin/

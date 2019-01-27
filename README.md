@@ -19,7 +19,7 @@ Basically you start the Docker image and use the wrapper script to schedule a "r
 docker run -d \
     --name c120 \
     --restart unless-stopped \
-    -v $DOWNLOAD_PATH:/c120/dowloads \
+    -v $DOWNLOAD_PATH:/c120/downloads \
     --mount source=c120-data,target=/c120/config \
     -e BASE_URL=$BASE_URL \
     -v $HOME/.ssh:/root/.ssh:ro \
