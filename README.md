@@ -15,17 +15,7 @@ Basically you start the Docker image and use the wrapper script to schedule a "r
 
 ## how?
 
-First you need to build the docker image, so ...
-
-```
-git clone https://github.com/hepto/c120
-cd c120
-docker build -t c120 .
-```
-
-//TODO publish image to Docker
-
-Then, edit the `start_c120.sh` script with your personal details - it's simply a wrapper to `docker run`, but there are some variables in there you need to customise to yourself.  Once thats all sorted:
+Edit the `start_c120.sh` script with your personal details - it's simply a wrapper to `docker run`, but there are some variables in there you need to customise to yourself.  Once thats all sorted:
 
 ```
 ./start_c120.sh
@@ -47,7 +37,7 @@ Then to get a single program, one time:
 ./get_iplayer.sh --get ID
 ```
 
-This will get that episode and put it in tje right location so that next time `c120` runs it will create an RSS feed for it.
+This will get that episode and put it in the right location so that next time `c120` runs it will create an RSS feed for it.
 
 BUT, you are more likely to want to schedule a series!  `get_iplayer` is clever enough to work out a series from a single episode, so simply call:
 

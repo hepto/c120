@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     make \
     golang
 
-RUN git clone https://github.com/hepto/get_iplayer_rss.git
+RUN git clone https://github.com/rjocoleman/get_iplayer_rss.git
 
 WORKDIR get_iplayer_rss
 
