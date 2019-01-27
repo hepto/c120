@@ -15,7 +15,27 @@ Basically you start the Docker image and use the wrapper script to schedule a "r
 
 ## how?
 
-Edit the `start_c120.sh` script with your personal details - it's simply a wrapper to `docker run`, but there are some variables in there you need to customise to yourself.  Once thats all sorted:
+```
+docker run -d \
+    --name c120 \
+    --restart unless-stopped \
+    -v $IPLAYER_DATA:/data \
+    -e BASE_URL=$BASE_URL \
+    -v $HOME/.ssh:/root/.ssh:ro \
+    -e RSYNC_USER=$RSYNC_USER \
+    -e RSYNC_HOST=$RSYNC_HOST \
+    -e RSYNC_FOLDER=$RSYNC_FOLDER \
+    hepto/c120
+```
+
+Where:
+`IPLAYER_DATA` is where you want episodes to be downloaded to (on the host).
+`BASE_URL` is the base URL for the RSS feed (i.e. where the episodes will be available from).
+`RSYNC_*` are credentials to sync the downloaded episodes (and RSS file) somewhere else - e.g. a web host or for backup purposes.
+
+Note, if BASE_URL or any of the RSYNC_* are not provided, the episodes will still be downloaded but the RSS generation and rsync will not be performed.  (Effectively this then just becomes a Docker wrapper to the basic `get_iplayer` PVR.)
+
+For ease, the `start_c120.sh` script can be edited with your personal details - it's simply a wrapper to `docker run`, but there are some variables in there you need to customise to yourself.  Once thats all sorted:
 
 ```
 ./start_c120.sh

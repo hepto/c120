@@ -20,4 +20,4 @@ docker run -d \
     -e RSYNC_USER=$RSYNC_USER \
     -e RSYNC_HOST=$RSYNC_HOST \
     -e RSYNC_FOLDER=$RSYNC_FOLDER \
-    c120
+    hepto/c120
