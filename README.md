@@ -19,18 +19,22 @@ Basically you start the Docker image and use the wrapper script to schedule a "r
 docker run -d \
     --name c120 \
     --restart unless-stopped \
-    -v $IPLAYER_DATA:/data \
+    -v $DOWNLOAD_PATH:/c120/dowloads \
+    --mount source=c120-data,target=/c120/config \
     -e BASE_URL=$BASE_URL \
     -v $HOME/.ssh:/root/.ssh:ro \
     -e RSYNC_USER=$RSYNC_USER \
     -e RSYNC_HOST=$RSYNC_HOST \
-    -e RSYNC_FOLDER=$RSYNC_FOLDER \
+    -e RSYNC_PATH=$RSYNC_PATH \
     hepto/c120
 ```
 
 Where:
-`IPLAYER_DATA` is where you want episodes to be downloaded to (on the host).
-`BASE_URL` is the base URL for the RSS feed (i.e. where the episodes will be available from).
+
+`DOWNLOAD_PATH` is where you want episodes to be downloaded to (on the host).
+
+`BASE_URL` is the base URL for the RSS feed (i.e. where the episodes will be available from across the tubes).
+
 `RSYNC_*` are credentials to sync the downloaded episodes (and RSS file) somewhere else - e.g. a web host or for backup purposes.
 
 Note, if BASE_URL or any of the RSYNC_* are not provided, the episodes will still be downloaded but the RSS generation and rsync will not be performed.  (Effectively this then just becomes a Docker wrapper to the basic `get_iplayer` PVR.)
@@ -42,6 +46,8 @@ For ease, the `start_c120.sh` script can be edited with your personal details - 
 ```
 
 Now you should have running containeer called `c120`.
+
+If you use the instructions above, then all get_iplayer config is stored in a Docker volume called `c120-data` so that the container can be reloaded and all scheudled recordings are not lost.  You can put this somewhere else by mapping `c120/config` somehere else.
 
 Next is to schedule some recordings.  The `get_iplayer.sh` script simply wraps the standard `get_iplayer` script, but sets the right download locations inside the image.  So check the docs for `get-iplayer` to see what you can do in full, but typically you're gonna do:
 

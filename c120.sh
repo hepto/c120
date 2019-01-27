@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # common folders, expected to be mapped by `docker run` to a location on the host
-CONFIG=/data/config
-OUTPUT=/data/output
+CONFIG=/c120/config
+OUTPUT=/c120/downloads
 
 while true
 do 
@@ -18,11 +18,11 @@ do
     fi
     
     # if RSYNC_* set then sync downladed episodes to provided host
-    if [[ -z $RSYNC_USER || -z $RSYNC_HOST || -z $RSYNC_FOLDER ]]; then
+    if [[ -z $RSYNC_USER || -z $RSYNC_HOST || -z $RSYNC_PATH ]]; then
     	echo "Complete rsync crednetials not found, so not attempting rysnc"
     else
     	echo "Attempting rsync"
-    	rsync -avzh /data/output/ $RSYNC_USER@$RSYNC_HOST:$RSYNC_FOLDER
+    	rsync -avzh /data/output/ $RSYNC_USER@$RSYNC_HOST:$RSYNC_PATH
 	fi
 
 	# sleep for 4 hours
