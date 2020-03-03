@@ -1,51 +1,31 @@
-FROM debian as builder
+FROM alpine:latest
 
-WORKDIR /root
+RUN apk --update --no-cache add \
+  ffmpeg \
+  perl-cgi \
+  perl-mojolicious \
+  perl-lwp-protocol-https \
+  perl-xml-libxml \
+  jq \
+  su-exec 
 
-RUN apt-get update && apt-get install -y \
-  git \
-  make \
-  golang
+RUN wget -qnd "https://bitbucket.org/shield007/atomicparsley/raw/68337c0c05ec4ba2ad47012303121aaede25e6df/downloads/build_linux_x86_64/AtomicParsley" && \
+    install -m 755 -t /usr/local/bin ./AtomicParsley && \
+    rm ./AtomicParsley
 
-RUN git clone https://github.com/rjocoleman/get_iplayer_rss.git
+RUN wget -qO - "https://api.github.com/repos/get-iplayer/get_iplayer/releases/latest" > /tmp/latest.json && \
+    echo get_iplayer release `jq -r .name /tmp/latest.json` && \
+    wget -qO - "`jq -r .tarball_url /tmp/latest.json`" | tar -zxf - && \
+    cd get-iplayer* && \
+    install -m 755 -t /usr/local/bin ./get_iplayer && \
+    cd / && \
+    rm -rf get-iplayer* && \
+    rm /tmp/latest.json
 
-WORKDIR get_iplayer_rss
+COPY c120.sh /usr/local/bin/
 
-RUN GOBIN=/root/go/bin go get && make
-
-FROM debian
-
-RUN apt-get update && apt-get install -y \
-  wget \
-  rsync \
-  openssh-client \
-  gosu
-
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
-RUN apt-get update && apt-get install -y \
-  build-essential \
-  libwww-perl \
-  liblwp-protocol-https-perl \
-  libmojolicious-perl \
-  libxml-libxml-perl \
-  libcgi-pm-perl \
-  cpanminus \
-  liblocal-lib-perl \
-  atomicparsley \
-  ffmpeg
-
-RUN wget https://raw.githubusercontent.com/get-iplayer/get_iplayer/master/get_iplayer
-RUN install -m 755 ./get_iplayer /usr/local/bin
-
-RUN mkdir -p /c120/downloads /c120/config
+RUN mkdir -p /c120/config /c120/downloads
 RUN chmod -R 777 /c120
 
-COPY --from=builder /root/get_iplayer_rss/get_iplayer_rss /usr/local/bin/
-COPY c120.sh /usr/bin/
-
-CMD ["c120.sh"]
+CMD ["/usr/local/bin/c120.sh"]
 

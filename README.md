@@ -1,51 +1,41 @@
-# c120
+# c120-minimal
 
-c120 is a system to grab BBC Radio programs and publish to RSS for subscription in a plain old podcast app.
+c1200-minimal tries to be a very minimal image of get_iplayer to download readio programs.
 
 ## what?
 
 c120 has two main components:
 
-* a long running script (`c120`) that periodically downloads subscribed shows from the BBC, creates an RSS feed for them and then syncs them to a static webhost so that the feed can be added to a podcast app
+* a long running script (`c120`) that periodically downloads subscribed shows from the BBC.
 * a wrapper to the popular `get_iplayer` script to search and schedule recordings inside `c120`.
 
 It all lives within a Docker container so you don't have to worry about dependencies or configuration - just run and go!
 
-Basically you start the Docker image and use the wrapper script to schedule a "recordings".  Every 4 hours `c120` will check for new episodes, download and tag them, create an RSS feed and then rsync them to another location, typically for hosting.
+Basically you start the Docker image and use the wrapper script to schedule a "recording".  Every 4 hours `c120` will check for new episodes and download to a shared drive.
 
 ## how?
 
 ```
+#!/bin/sh
+
 docker run -d \
     --name c120 \
     --restart unless-stopped \
-    -v $DOWNLOAD_PATH:/c120/downloads \
+    -e PUID=`id -u` \
+    -e PGID=`id -g` \
     --mount source=c120-data,target=/c120/config \
-    -e BASE_URL=$BASE_URL \
-    -v $HOME/.ssh:/root/.ssh:ro \
-    -e RSYNC_USER=$RSYNC_USER \
-    -e RSYNC_HOST=$RSYNC_HOST \
-    -e RSYNC_PATH=$RSYNC_PATH \
+    -v /path/to/downloads:/c120/downloads \
     hepto/c120
+
 ```
 
-Where:
-
-`DOWNLOAD_PATH` is where you want episodes to be downloaded to (on the host).
-
-`BASE_URL` is the base URL for the RSS feed (i.e. where the episodes will be available from across the tubes).
-
-`RSYNC_*` are credentials to sync the downloaded episodes (and RSS file) somewhere else - e.g. a web host or for backup purposes.
-
-Note, if BASE_URL or any of the RSYNC_* are not provided, the episodes will still be downloaded but the RSS generation and rsync will not be performed.  (Effectively this then just becomes a Docker wrapper to the basic `get_iplayer` PVR.)
-
-For ease, the `start_c120.sh` script can be edited with your personal details - it's simply a wrapper to `docker run`, but there are some variables in there you need to customise to yourself.  Once thats all sorted:
+For ease, the `start_c120.sh` script can be edited with your personal details - it's simply a wrapper to `docker run` above.
 
 ```
 ./start_c120.sh
 ```
 
-Now you should have running containeer called `c120`.
+Now you should have running container called `c120`.
 
 If you use the instructions above, then all get_iplayer config is stored in a Docker volume called `c120-data` so that the container can be reloaded and all scheudled recordings are not lost.  You can put this somewhere else by mapping `c120/config` somehere else.
 
@@ -72,14 +62,6 @@ BUT, you are more likely to want to schedule a series!  `get_iplayer` is clever 
 ```
 
 And it will be added to the list.  Next time `c120` runs it will then download all episdoe for that program, and create the RSS feed.
-
-All the audio and RSS files will then be synced to your host of choice - and there'll be one RSS feed per program.
-
-NOTE - the script relies on using public key authentication to the remote rsync path to avoid having passwords in any of the config, or being prompted, so the local .ssh directory of the host is mapped into the Docker image so it has access to the keys.
-
-Configuring hosting and all that is an excercise for the reader, but an easy way is to enable directory listing on the web server so you can then copy the paths to the RSS feeds and add them to your reader. Oh and think about using basic auth and letsencrypt while you're there ...
-
-Note, it's perfectly reasonbable to mount the output location as the webroot in another Docker image and serve from it directly.  I do this and use the rsync simply as a backup!
 
 ## why?
 
