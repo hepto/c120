@@ -7,14 +7,14 @@ OUTPUT=/c120/downloads
 while true
 do 
     # run PVR to download new episodes
-    /usr/bin/get_iplayer --profile-dir $CONFIG --output $OUTPUT --pvr
+    /usr/local/bin/get_iplayer --profile-dir $CONFIG --output $OUTPUT --pvr
 
     # if BASE_URL set then create an RSS feed from all downloaded episodes
     if [[ -z $BASE_URL ]]; then
     	echo "c120.sh > No RSS base URL found, so not creating RSS feed"
     else
     	echo "c120.sh > Creating RSS feed"
-    	/usr/bin/get_iplayer_rss gen -d $CONFIG -o $OUTPUT -u $BASE_URL
+    	/usr/local/bin/get_iplayer_rss gen -d $CONFIG -o $OUTPUT -u $BASE_URL
     fi
     
     # if RSYNC_* set then sync downladed episodes to provided host

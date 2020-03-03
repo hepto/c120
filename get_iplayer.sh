@@ -2,5 +2,5 @@
 
 docker exec \
     c120 \
-    get_iplayer --profile-dir /c120/config --output /c120/downloads \
+    gosu user get_iplayer --profile-dir /c120/config --output /c120/downloads \
     "$@"
