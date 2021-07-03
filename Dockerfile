@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine
 
 RUN apk --update --no-cache add \
   ffmpeg \
@@ -7,11 +7,10 @@ RUN apk --update --no-cache add \
   perl-lwp-protocol-https \
   perl-xml-libxml \
   jq \
-  su-exec 
+  su-exec
 
-RUN wget -qnd "https://bitbucket.org/shield007/atomicparsley/raw/68337c0c05ec4ba2ad47012303121aaede25e6df/downloads/build_linux_x86_64/AtomicParsley" && \
-    install -m 755 -t /usr/local/bin ./AtomicParsley && \
-    rm ./AtomicParsley
+RUN apk --update --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing add \
+  atomicparsley
 
 RUN wget -qO - "https://api.github.com/repos/get-iplayer/get_iplayer/releases/latest" > /tmp/latest.json && \
     echo get_iplayer release `jq -r .name /tmp/latest.json` && \
