@@ -16,15 +16,15 @@ RUN wget -qO - "https://api.github.com/repos/get-iplayer/get_iplayer/releases/la
     echo get_iplayer release `jq -r .name /tmp/latest.json` && \
     wget -qO - "`jq -r .tarball_url /tmp/latest.json`" | tar -zxf - && \
     cd get-iplayer* && \
-    install -m 755 -t /usr/local/bin ./get_iplayer && \
+    install -m 755 -t /usr/bin ./get_iplayer && \
     cd / && \
     rm -rf get-iplayer* && \
     rm /tmp/latest.json
 
-COPY c120.sh /usr/local/bin/
+COPY c120.sh /usr/bin/
 
 RUN mkdir -p /c120/config /c120/downloads
 RUN chmod -R 777 /c120
 
-CMD ["/usr/local/bin/c120.sh"]
+CMD ["/usr/bin/c120.sh"]
 

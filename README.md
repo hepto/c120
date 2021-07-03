@@ -1,6 +1,6 @@
 # c120-minimal
 
-c1200-minimal tries to be a very minimal image of get_iplayer to download readio programs.
+c120-minimal tries to be a very minimal image of get_iplayer to download radio programs.
 
 ## what?
 
